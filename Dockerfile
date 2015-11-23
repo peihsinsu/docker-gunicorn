@@ -1,10 +1,12 @@
 FROM ubuntu:14.04
 
-MAINTAINER Yaroslav Admin <devoto13@gmail.com>
+MAINTAINER Simon Su <simonsu.mail@gmail.com>
 
 # Base
 ENV LANG en_US.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
+ENV APP_WSGI myproject.wsgi
+ENV APP_NAME myproject
 
 RUN locale-gen en_US en_US.UTF-8
 RUN dpkg-reconfigure locales
@@ -26,7 +28,7 @@ CMD ["/usr/local/bin/startup"]
 
 # Install global dependencies
 RUN apt-get install -y python python-dev python-setuptools python-pip
-RUN pip install gunicorn setproctitle
+RUN pip install gunicorn setproctitle django
 
 # Install gunicorn running script
 ADD run /usr/local/bin/run
@@ -35,5 +37,8 @@ RUN chmod +x /usr/local/bin/run
 # Volumes
 VOLUME ["/root/app/logs"]
 
+# Workdir
+WORKDIR /app
+
 # Ports
-EXPOSE 80
+EXPOSE 8000
